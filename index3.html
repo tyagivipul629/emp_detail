@@ -1,0 +1,44 @@
+<html>
+	<head>
+		<title>jsonp test</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>		
+		<script type="text/javascript">
+            $(function(){				
+                $('#search').on('keyup',function(){
+                    var result="";
+					var datum = $('#search').val();
+                    var emprecord = {};
+                    emprecord.empname = datum;
+                    if(datum!='')
+					{$.ajax({
+						type: 'POST',
+				        dataType: 'json',
+                        data : emprecord,
+                        url: 'http://localhost:3000/sub',						
+                        success: function(response) {
+                            if(response.status=="success")
+                        {   var arr=[];
+                            arr=response.data;
+                            result+="<table><tr><th>Empid</th><th>Empname</th><th>Empsal</th><th>Empno</th></tr>";
+                            for(var i=0;i<arr.length;++i)
+                                {result+="<tr><td>"+arr[i].empid+"</td><td>"+arr[i].empname+"</td><td>"+arr[i].empsal+"</td><td>"+arr[i].empno+"</td></tr>";}
+                            result+="</table>";
+                            $("#container").html(result);
+                        }
+                        else{
+                            $("#container").html("No result found!!");
+                        }
+                        }
+                    });}
+                else{
+                    $("#container").html("No result found!!");
+                }
+                });				
+            });
+        </script>
+    </head>
+    <body>
+        <div id="select_div"><input type="text" name="employee_name" id="search" placeholder="Enter Name ..."/></div> 
+        <div id="container"></div>   
+    </body>
+</html>
